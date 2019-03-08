@@ -83,12 +83,12 @@ if [ "$USERNAME" = "root" ]; then
 fi
  
 # searcch sshd conf file for ssh port if not default ask user for new port/
-# set var SSHPORT by user imput this is used for UFW firewall settings
-searchString="port 22"
+# set var SSHPORT by user imput if not default this is used for UFW firewall settings
+searchString="Port 22"
 file="/etc/ssh/sshd_config"
 if grep -Fq "$searchString" $file
 then
-	echo "Default SSH Port"
+	echo "Default SSH Port Found"
 	else
 	echo "Looks like you have a non default SSH port"
 	echo -e
