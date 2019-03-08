@@ -18,7 +18,7 @@
 #9. ZelNodes can saturate your network at times. If you are sharing the connection with other devices at home, its possible to fail a benchmark if network is saturated.
 #############################################################################################################################################################################
 
-Version V3
+#Version V3
 
 ###### you must be logged in as a sudo user, not root #######
 
