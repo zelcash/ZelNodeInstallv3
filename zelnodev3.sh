@@ -81,12 +81,24 @@ if [ "$USERNAME" = "root" ]; then
     echo -e "\033[1;36mYou are currently logged in as \033[0mroot\033[1;36m, please log out and\nlog back in with the username you just created.\033[0m"
     exit
 fi
+ 
+# searcch sshd conf file for ssh port if not default ask user for new port/
+# set var SSHPORT by user imput this is used for UFW firewall settings
+searchString="port 22"
+file="/etc/ssh/sshd_config"
+if grep -Fq "$searchString" $file
+then
+	echo "non default SSH"
+	else
+	echo "Looks like you have a non default SSH port"
+	echo -e
+	read -p 'please enter your SSH port, then hit [ENTER]: ' SSHPORT 
+fi
+echo "Your SSH Port is:"$SSHPORT
+sleep 2
 
-    #echo -e "Hello $USERNAME, please enter your password: "
-    #[ "$UID" -eq 0 ] || exec sudo "$0" "$@"
-
+#get WAN IP ask user to verify it and or change it if needed 
 WANIP=$(wget http://ipecho.net/plain -O - -q)
-
 echo -e 'Detected IP Address is' $WANIP
 echo -e
 read -p 'Is IP Address correct? [Y/n] ' -n 1 -r
@@ -106,9 +118,9 @@ echo -e "\033[1;33m=======================================================\033[0
 echo "Installing packages and updates..."
 sleep 2
 #adding ZelCash APT Repo
-echo 'deb https://zelcash.github.io/aptrepo/ all main' | sudo tee --append /etc/apt/sources.list.d/zelcash.list
-gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D
-gpg --export 4B69CA27A986265D | sudo apt-key add -
+echo 'deb https://zelcash.github.io/aptrepo/ all main' | sudo tee --append /etc/apt/sources.list.d/zelcash.list > /dev/null
+gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D > /dev/null
+gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null
 sudo apt-get update -y
 #installing dependencies
 sudo apt-get install software-properties-common -y
@@ -259,7 +271,7 @@ echo -e "==================================================================\033[
 echo ""
 
 echo -e "\033[1;32mConfiguring firewall and enabling fail2ban...\033[0m"
-sudo ufw allow ssh/tcp
+sudo ufw allow $SSHPORT/tcp
 sudo ufw allow $PORT/tcp
 sudo ufw logging on
 sudo ufw default deny incoming
@@ -304,7 +316,7 @@ clear
 echo -e "\033[1;33m==========================================================="
 echo -e "\033[1;32mZELNODE SYNC STATUS"
 echo -e "THIS SCREEN REFRESHES EVERY 30 SECONDS"
-echo -e "TO VIEW THE CURRENT BLOCK GOT TO https://explorer.zel.cash/ "
+echo -e "TO VIEW THE CURRENT BLOCK GO TO https://explorer.zel.cash/ "
 echo -e "\033[1;33m===========================================================\033[0m"
 echo ""
 $COIN_CLI getinfo
