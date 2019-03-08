@@ -65,11 +65,11 @@ countdown()
   echo -e "\033[1K"
 )
 
-#Suppressing password promts for this user so zelnode can operate
+#Suppressing password prompts for this user so zelnode can operate
 sudo echo -e "$(who -m | awk '{print $1;}') ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo
 clear
 echo -e '\033[1;33m===============================================================================\033[0m'
-echo -e 'ZelNode Setup, v2.3'
+echo -e 'ZelNode Setup, v3.0'
 echo -e '\033[1;33m===============================================================================\033[0m'
 echo -e '\033[1;34m23 Feb. 2019, by AltTank fam, dk808, Goose-Tech, Skyslayer, & Packetflow\033[0m'
 echo -e
@@ -86,15 +86,14 @@ fi
 # set var SSHPORT by user imput if not default this is used for UFW firewall settings
 searchString="Port 22"
 file="/etc/ssh/sshd_config"
-if grep -Fq "$searchString" $file
-then
-	echo "Default SSH Port Found"
-	else
-	echo "Looks like you have a non default SSH port"
-	echo -e
-	read -p 'please enter your SSH port, then hit [ENTER]: ' SSHPORT 
+if grep -Fq "$searchString" $file ; then
+    echo -e "Default SSH port found."
+else
+    echo -e "Looks like you have configured a custom SSH port"
+    echo -e
+    read -p 'Enter your SSH port, then hit [ENTER]: ' SSHPORT 
 fi
-echo "Your SSH Port is:"$SSHPORT
+echo -e "\033[1;33mYour SSH port is: \033[0m" $SSHPORT
 sleep 2
 
 #get WAN IP ask user to verify it and or change it if needed 
@@ -115,7 +114,7 @@ read zelnodeprivkey
 echo -e "\033[1;33m=======================================================\033[0m"
 echo "INSTALLING ZELNODE DEPENDENCIES"
 echo -e "\033[1;33m=======================================================\033[0m"
-echo "Installing packages and updates..."
+echo "Adding ZelCash Repos & Installing Packages..."
 sleep 2
 #adding ZelCash APT Repo
 echo 'deb https://zelcash.github.io/aptrepo/ all main' | sudo tee --append /etc/apt/sources.list.d/zelcash.list > /dev/null
