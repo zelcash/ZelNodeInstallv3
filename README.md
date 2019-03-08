@@ -40,7 +40,7 @@ Click ZelNode Key to copy to clipboard
 Download script & begin installation of ZelNode
 PLEASE BE SURE YOU ARE LOGGED IN AS YOUR USERNAME BEFORE RUNNING THIS SCRIPT
 
-sudo wget -O zelnode.sh https://raw.githubusercontent.com/zelcash/ZelNodeInstallv2/master/zelnodev2.sh && sudo chmod u+x zelnode.sh && sudo bash ./zelnode.sh
+wget -O zelnode.sh https://raw.githubusercontent.com/zelcash/ZelNodeInstallv2/master/zelnodev2.sh && chmod u+x zelnode.sh && sudo bash ./zelnode.sh
 Follow instructions to run the install script which will install and configure your node with all necessary options. Be ready to paste your ZelNode Key when asked.
 
 NOTE: This process may take anywhere from 5 to 15 minutes, depending on your VPS HW specs.
