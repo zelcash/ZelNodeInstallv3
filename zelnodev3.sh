@@ -311,6 +311,7 @@ clear
 echo -e "\033[1;33m==========================================================="
 echo -e "\033[1;32mZELNODE SYNC STATUS"
 echo -e "THIS SCREEN REFRESHES EVERY 30 SECONDS"
+echo -e "TO VIEW THE CURRENT BLOCK GOT TO https://explorer.zel.cash/ "
 echo -e "\033[1;33m===========================================================\033[0m"
 echo ""
 $COIN_CLI getinfo
