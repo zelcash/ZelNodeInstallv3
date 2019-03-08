@@ -18,25 +18,23 @@
 #9. ZelNodes can saturate your network at times. If you are sharing the connection with other devices at home, its possible to fail a benchmark if network is saturated.
 #############################################################################################################################################################################
 
-#Version V3
+Version V3
 
 ###### you must be logged in as a sudo user, not root #######
 
 COIN_NAME='zelcash'
 
 #wallet information
-WALLET_DOWNLOAD='https://github.com/zelcash/zelcash/releases/download/v3.1.0/ZelCash-Linux.tar.gz'
 WALLET_BOOTSTRAP='https://zelcore.io/zelcashbootstraptxindex.zip'
 BOOTSTRAP_ZIP_FILE='zelcashbootstraptxindex.zip'
-WALLET_TAR_FILE='ZelCash-Linux.tar.gz'
 ZIPTAR='unzip'
 CONFIG_FILE='zelcash.conf'
-RPCPORT=16124
 PORT=16125
+SSHPORT=22
 COIN_DAEMON='zelcashd'
 COIN_CLI='zelcash-cli'
 COIN_TX='zelcash-tx'
-COIN_PATH='/usr/bin'
+COIN_PATH='/usr/local/bin'
 USERNAME=$(who -m | awk '{print $1;}')
 YELLOW='\033[1;33m'
 BLUE='\033[1;34m'
@@ -83,6 +81,14 @@ if [ "$USERNAME" = "root" ]; then
     echo -e "\033[1;36mYou are currently logged in as \033[0mroot\033[1;36m, please log out and\nlog back in with the username you just created.\033[0m"
     exit
 fi
+
+#check for root and exit with notice if user is root
+ISROOT=$(whoami | awk '{print $1;}')
+if [ "$ISROOT" = "root" ]; then
+    echo -e "\033[1;36mYou are currently logged in as \033[0mroot\033[1;36m, please log out and\nlog back in with as your sudo user.\033[0m"
+    exit
+fi
+
     #echo -e "Hello $USERNAME, please enter your password: "
     #[ "$UID" -eq 0 ] || exec sudo "$0" "$@"
 
@@ -106,7 +112,12 @@ echo "INSTALLING ZELNODE DEPENDENCIES"
 echo -e "\033[1;33m=======================================================\033[0m"
 echo "Installing packages and updates..."
 sleep 2
+#adding ZelCash APT Repo
+echo 'deb https://zelcash.github.io/aptrepo/ all main' | sudo tee --append /etc/apt/sources.list.d/zelcash.list
+gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D
+gpg --export 4B69CA27A986265D | sudo apt-key add -
 sudo apt-get update -y
+#installing dependencies
 sudo apt-get install software-properties-common -y
 sudo apt-get update -y
 sudo apt-get upgrade -y
@@ -116,6 +127,7 @@ sudo apt-get install libc6-dev m4 g++-multilib -y
 sudo apt-get install autoconf ncurses-dev unzip git python python-zmq -y
 sudo apt-get install wget curl bsdmainutils automake -y
 sudo apt-get remove sysbench -y
+
 echo -e "\033[1;33mPackages complete...\033[0m"
 echo -e
 
@@ -136,8 +148,6 @@ fi
     echo "rpcuser=$RPCUSER" >> ~/.zelcash/$CONFIG_FILE
     echo "rpcpassword=$PASSWORD" >> ~/.zelcash/$CONFIG_FILE
     echo "rpcallowip=127.0.0.1" >> ~/.zelcash/$CONFIG_FILE
-    #echo "rpcport=$RPCPORT" >> ~/.zelcash/$CONFIG_FILE
-    #echo "port=$PORT" >> ~/.zelcash/$CONFIG_FILE
     echo "zelnode=1" >> ~/.zelcash/$CONFIG_FILE
     echo zelnodeprivkey=$zelnodeprivkey >> ~/.zelcash/$CONFIG_FILE
     echo "server=1" >> ~/.zelcash/$CONFIG_FILE
@@ -158,27 +168,55 @@ fi
 
 sleep 2
 
+#Setup zelcash debug.log log file rotation
+echo -e "\n\033[1;33mConfiguring log rotate function...\033[0m"
+sleep 1
+if [ -f /etc/logrotate.d/zeldebuglog ]; then
+    echo -e "\033[1;36mExisting log rotate conf found, backing up to ~/zeldebuglogrotate.old ...\033[0m"
+    sudo mv /etc/logrotate.d/zeldebuglog ~/zeldebuglogrotate.old;
+    sleep 2
+fi
+touch /home/$USERNAME/zeldebuglog
+cat <<EOM > /home/$USERNAME/zeldebuglog
+/home/$USERNAME/.zelcash/debug.log {
+    compress
+    copytruncate
+    missingok
+    daily
+    rotate 7
+}
+EOM
+cat /home/$USERNAME/zeldebuglog | sudo tee -a /etc/logrotate.d/zeldebuglog > /dev/null
+rm /home/$USERNAME/zeldebuglog
+sudo logrotate --force /etc/logrotate.d/zeldebuglog
+echo -e "\n\033[1;32mLog rotate configuration complete.\n~/.zelcash/debug.log file will be backed up daily for 7 days then rotated.\033[0m"
+sleep 5
+
+
 #begin downloading wallet binaries
 echo -e "\033[1;32mKilling and removing any old instances of $COIN_NAME."
-echo -e "Downloading new wallet...\033[0m"
+echo -e "Installing ZelCash daemon...\033[0m"
+
+#Closing zelcash daemon if running
+sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 3
+sudo zelcash-cli stop > /dev/null 2>&1 && sleep 5
 sudo killall $COIN_DAEMON > /dev/null 2>&1
-cd /usr/bin && sudo rm $COIN_CLI $COIN_DAEMON > /dev/null 2>&1 && sleep 2
-# added to be sure to delete the old files for someone using the old script
-cd /usr/local/bin && sudo rm $COIN_CLI $COIN_DAEMON > /dev/null 2>&1 && sleep 2
-cd
-wget -c $WALLET_DOWNLOAD -O - | sudo tar -xz &> /dev/null
-sudo mv $COIN_DAEMON $COIN_CLI $COIN_TX /usr/bin
-sudo chmod 555 /usr/bin/zelcash*
-sudo rm -rf $WALLET_TAR_FILE && sudo rm -rf ~/zelcash-gtest && sudo rm -rf ~/fetch-params.sh
+#delete any existing zelcash form /usr/local/bin and /usr/bin
+sudo rm /usr/local/bin/zelcash* > /dev/null 2>&1 && sleep 2
+sudo rm /usr/bin/zelcash* > /dev/null 2>&1 && sleep 2
 
+#Install zelcash files using APT
+sudo apt-get install zelcash -y
+sudo chmod 755 /usr/local/bin/zelcash*
 
+# Download and extract the bootstrap chainstate and blocks files to ~/.zelcash
 echo -e "\033[1;32mDownloading wallet bootstrap please be patient...\033[0m"
 wget -U Mozilla/5.0 $WALLET_BOOTSTRAP
 unzip -o $BOOTSTRAP_ZIP_FILE -d /home/$USERNAME/.zelcash
 rm -rf $BOOTSTRAP_ZIP_FILE
 #end download/extract bootstrap file
 
-
+#Downloading chain params
 echo ""
 echo -e "\033[1;32mDownloading chain params...\033[0m"
 wget -q $FETCHPARAMS
@@ -188,6 +226,7 @@ sudo chown -R $USERNAME:$USERNAME /home/$USERNAME
 rm fetch-params.sh
 echo -e "\033[1;33mDone fetching chain params.\033[0m"
 
+# setup zelcash daemon to run as a service 
 echo -e "\033[1;32mCreating system service file...\033[0m"
 sudo touch /etc/systemd/system/$COIN_NAME.service
 sudo chown $USERNAME:$USERNAME /etc/systemd/system/$COIN_NAME.service
