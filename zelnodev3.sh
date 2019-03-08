@@ -88,7 +88,7 @@ searchString="port 22"
 file="/etc/ssh/sshd_config"
 if grep -Fq "$searchString" $file
 then
-	echo "non default SSH"
+	echo "Default SSH Port"
 	else
 	echo "Looks like you have a non default SSH port"
 	echo -e
