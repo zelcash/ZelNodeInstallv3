@@ -225,7 +225,7 @@ echo ""
 echo -e "\033[1;32mDownloading chain params...\033[0m"
 wget -q $FETCHPARAMS
 chmod 770 fetch-params.sh &> /dev/null
-sudo bash fetch-params.sh
+bash fetch-params.sh
 sudo chown -R $USERNAME:$USERNAME /home/$USERNAME
 rm fetch-params.sh
 echo -e "\033[1;33mDone fetching chain params.\033[0m"
