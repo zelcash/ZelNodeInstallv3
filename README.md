@@ -31,9 +31,9 @@ or Digital Ocean: https://m.do.co/c/c9c22684c5db (link to $100 referral credit f
 
    **For Basic, you can use Vultr $20/mo (60GB SSD/2xCPU/4GB RAM) or DO $20/mo (80GB SSD/2xCPU/4GB RAM)**
 
-   **For Super, you can use Vultr $80/mo (200GB SSD/6xCPU/8GB RAM) or DO  $40/mo (160GB SSD/4xCPU/8GB RAM)**
+   **For Super, you can use Vultr $40/mo (160GB SSD/4xCPU/8GB RAM) or DO  $40/mo (160GB SSD/4xCPU/8GB RAM)**
 
-   **For BAMF, you can use DO $160/mo (640GB SSD/8xCPU/32GB RAM)**
+   **For BAMF, you can use Vultr $160/mo (640GB SSD/8xCPU/32GB RAM) or DO $160/mo (640GB SSD/8xCPU/32GB RAM)**
 
 2) **Connect to your VPS server console using PuTTY** terminal program, login as root and create new su user:
 
