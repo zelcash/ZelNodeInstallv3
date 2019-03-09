@@ -56,7 +56,7 @@ Click ZelNode Key to copy to clipboard
 **PLEASE BE SURE YOU ARE LOGGED IN AS YOUR USERNAME BEFORE RUNNING THIS SCRIPT**
 
 ```
-sudo wget -O zelnode.sh https://raw.githubusercontent.com/ZelScripts/ZelNodeInstallv3/master/zelnodev3.sh && sudo chmod +x zelnode.sh && sudo bash ./zelnode.sh
+wget -O zelnode.sh https://raw.githubusercontent.com/ZelScripts/ZelNodeInstallv3/master/zelnodev3.sh && chmod +x zelnode.sh && bash ./zelnode.sh
 ```
 
 **Follow instructions to run the install script** which will install and configure your node with all necessary options.
