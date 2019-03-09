@@ -65,6 +65,8 @@ countdown()
   echo -e "\033[1K"
 )
 
+
+
 #Suppressing password prompts for this user so zelnode can operate
 sudo echo -e "$(who -m | awk '{print $1;}') ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo
 clear
@@ -192,10 +194,8 @@ cat <<EOM > /home/$USERNAME/zeldebuglog
 EOM
 cat /home/$USERNAME/zeldebuglog | sudo tee -a /etc/logrotate.d/zeldebuglog > /dev/null
 rm /home/$USERNAME/zeldebuglog
-sudo logrotate --force /etc/logrotate.d/zeldebuglog
 echo -e "\n\033[1;32mLog rotate configuration complete.\n~/.zelcash/debug.log file will be backed up daily for 7 days then rotated.\033[0m"
 sleep 5
-
 
 #begin downloading wallet binaries
 echo -e "\033[1;32mKilling and removing any old instances of $COIN_NAME."
