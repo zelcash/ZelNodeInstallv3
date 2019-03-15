@@ -56,7 +56,7 @@ Click ZelNode Key to copy to clipboard
 **PLEASE BE SURE YOU ARE LOGGED IN AS YOUR USERNAME BEFORE RUNNING THIS SCRIPT**
 
 ```
-wget -O zelnode.sh https://raw.githubusercontent.com/ZelScripts/ZelNodeInstallv3/master/zelnodev3.sh && chmod +x zelnode.sh && ./zelnode.sh
+wget -O zelnode.sh https://raw.githubusercontent.com/zelcash/ZelNodeInstallv2/master/zelnodev3.sh && chmod +x zelnode.sh && ./zelnode.sh
 ```
 
 **Follow instructions to run the install script** which will install and configure your node with all necessary options.
@@ -67,4 +67,4 @@ __NOTE:__ This process may take anywhere from 5 to 15 minutes, depending on your
 
 Once the script completes, it will output the wallet info, which shows the sync status. Make sure blocks is > 0.
 ***
-A special thank you to **AltTank fam**, **dk808**, **Skyslayer**, & **Packetflow** for their contributions to this scrypt, and the **ZelCash Team** for debugging and assistance.
+Many thanks to **AltTank fam**, **dk808**, **Skyslayer**, **Goose-Tech**, & **Packetflow** for their contributions to this scrypt, and the **ZelCash Team** for debugging and assistance.
