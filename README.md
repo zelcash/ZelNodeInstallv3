@@ -26,7 +26,7 @@ If you follow the steps and use a newly installed Ubuntu Server 18.04 VPS, it wi
 1) **Create a new VPS** or use existing one.
 
 VPS resource configuration is as follows:
-You can use Vultr: https://goo.gl/86MVfW
+You can use Vultr: https://www.vultr.com/register/
 or Digital Ocean: https://m.do.co/c/c9c22684c5db (link to $100 referral credit for new users)
 
    **For Basic, you can use Vultr $20/mo (60GB SSD/2xCPU/4GB RAM) or DO $20/mo (80GB SSD/2xCPU/4GB RAM)**
@@ -56,7 +56,7 @@ Click ZelNode Key to copy to clipboard
 **PLEASE BE SURE YOU ARE LOGGED IN AS YOUR USERNAME BEFORE RUNNING THIS SCRIPT**
 
 ```
-wget -O zelnode.sh https://raw.githubusercontent.com/zelcash/ZelNodeInstallv2/master/zelnodev3.sh && chmod +x zelnode.sh && ./zelnode.sh
+wget -O zelnode.sh https://raw.githubusercontent.com/zelcash/ZelNodeInstallv3/master/zelnodev3.sh && chmod +x zelnode.sh && ./zelnode.sh
 ```
 
 **Follow instructions to run the install script** which will install and configure your node with all necessary options.
