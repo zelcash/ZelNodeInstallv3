@@ -129,6 +129,8 @@ sleep 2
 #adding ZelCash APT Repo
 echo 'deb https://zelcash.github.io/aptrepo/ all main' | sudo tee --append /etc/apt/sources.list.d/zelcash.list > /dev/null
 gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D > /dev/null
+gpg --keyserver na.pool.sks-keyservers.net --recv 4B69CA27A986265D > /dev/null
+gpg --keyserver eu.pool.sks-keyservers.net --recv 4B69CA27A986265D > /dev/null
 gpg --export 4B69CA27A986265D | sudo apt-key add -
 sudo apt-get update -y
 
