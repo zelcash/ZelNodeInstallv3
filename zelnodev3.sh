@@ -223,12 +223,20 @@ sudo apt-get install zelcash -y
 sudo chmod 755 /usr/local/bin/zelcash*
 
 # Download and extract the bootstrap chainstate and blocks files to ~/.zelcash
-echo -e "${GREEN}Downloading wallet bootstrap please be patient...${NC}"
 rm -rf $BOOTSTRAP_ZIP_FILE
+if [ -e ~/.zelcash/blocks -a -e ~/.zelcash/chainstate ]; then
+    rm -rf ~/.zelcash/blocks ~/.zelcash/chainstate
+    echo -e "${GREEN}Downloading wallet bootstrap please be patient...${NC}"
+    wget $WALLET_BOOTSTRAP
+    unzip -o $BOOTSTRAP_ZIP_FILE -d /home/$USERNAME/.zelcash
+    rm -rf $BOOTSTRAP_ZIP_FILE
+else
+    echo -e "${GREEN}Downloading wallet bootstrap please be patient...${NC}"
+    wget $WALLET_BOOTSTRAP
+    unzip -o $BOOTSTRAP_ZIP_FILE -d /home/$USERNAME/.zelcash
+    rm -rf $BOOTSTRAP_ZIP_FILE
+fi
 sleep 2
-wget $WALLET_BOOTSTRAP
-unzip -o $BOOTSTRAP_ZIP_FILE -d /home/$USERNAME/.zelcash
-rm -rf $BOOTSTRAP_ZIP_FILE
 
 #Downloading chain params
 echo ""
@@ -243,11 +251,11 @@ echo -e "${YELLOW}Done fetching chain params.${NC}"
 #Downloading update script
 if [ -f ~/zelnodeupdate.sh ]; then
     rm ~/zelnodeupdate.sh
-	echo -e "${GREEN}Downloading update script for future updates...${NC}"
-	wget https://raw.githubusercontent.com/zelcash/ZelNodeInstallv3/master/zelnodeupdate.sh && chmod +x zelnodeupdate.sh
+    echo -e "${GREEN}Downloading update script for future updates...${NC}"
+    wget https://raw.githubusercontent.com/zelcash/ZelNodeInstallv3/master/zelnodeupdate.sh && chmod +x zelnodeupdate.sh
 else
     echo -e "${GREEN}Downloading update script for future updates...${NC}"
-	wget https://raw.githubusercontent.com/zelcash/ZelNodeInstallv3/master/zelnodeupdate.sh && chmod +x zelnodeupdate.sh
+    wget https://raw.githubusercontent.com/zelcash/ZelNodeInstallv3/master/zelnodeupdate.sh && chmod +x zelnodeupdate.sh
 fi
 
 #Downloading chown script and create cron job to run it every minute
